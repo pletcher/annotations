@@ -34,4 +34,4 @@ export const annotationDecorator = (
   component: Annotation(hoverEntityKey, onHover, onClick)
 })
 
-
+export default annotationDecorator
