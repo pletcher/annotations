@@ -9,7 +9,7 @@
     "deploy-storybook": "storybook-to-ghpages",
     "prepare": "npm run build",
     "storybook": "start-storybook -p 6006",
-    "test": "jest src/**/*.test.js",
+    "test": "jest src/**/*.test.*",
     "test:coverage": "npm test -- --coverage",
     "test:watch": "npm test -- --watch"
   },
@@ -124,6 +124,6 @@
     "moduleNameMapper": {
       "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
     },
-    "setupTestFrameworkScriptFile": "<rootDir>/testSetup.js"
+    "setupFilesAfterEnv": ["./testSetup.js"]
   }
 }

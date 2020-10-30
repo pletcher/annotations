@@ -127,7 +127,8 @@ describe('Annotatable', () => {
       } as any
       const editorState = createEditorState(blocks, entityMap)
       const contentState = editorState.getCurrentContent()
-      const entity = contentState.getEntity('1')
+      const entityKey = contentState.getLastCreatedEntityKey()
+      const entity = contentState.getEntity(entityKey)
 
       expect(entity).toMatchObject(entityMap[0])
     })
