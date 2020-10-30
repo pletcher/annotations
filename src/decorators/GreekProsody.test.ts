@@ -70,10 +70,6 @@ describe('GreekProsody', () => {
       expect(GreekProsody.isLongByPosition('', 'ρκ')).toBe(true)
     })
 
-    it('returns `false` if there is no next syllable', () => {
-      expect(GreekProsody.isLongByPosition('')).toBe(false)
-    })
-
     it('returns `false` if none of the other conditions matches', () => {
       expect(GreekProsody.isLongByPosition('ε', 'πλ')).toBe(false)
     })

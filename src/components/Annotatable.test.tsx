@@ -94,6 +94,8 @@ describe('Annotatable', () => {
     it('returns an instance of EditorState', () => {
       const blocks = [{
         depth: 1,
+        entityRanges: [],
+        inlineStyleRanges: [],
         key: genKey(),
         text: 'text',
         type: 'unstyled'
@@ -107,10 +109,11 @@ describe('Annotatable', () => {
       const blocks = [{
         depth: 1,
         entityRanges: [{
-          key: '0',
+          key: 0,
           length: 5,
           offset: 1,
         }],
+        inlineStyleRanges: [],
         key: genKey(),
         text: 'lorem ipsum',
         type: 'unstyled',
@@ -121,10 +124,10 @@ describe('Annotatable', () => {
           type: 'BOLD',
           data: {}
         }
-      }
+      } as any
       const editorState = createEditorState(blocks, entityMap)
       const contentState = editorState.getCurrentContent()
-      const entity = contentState.getEntity('1').toJSON()
+      const entity = contentState.getEntity('1')
 
       expect(entity).toMatchObject(entityMap[0])
     })

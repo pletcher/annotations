@@ -1,5 +1,3 @@
-// @flow
-
 import React from 'react'
 
 import {
@@ -7,12 +5,12 @@ import {
   ANNOTATION_HOVER_BLUE
 } from '../constants'
 
-export type Props = {
-  children: string | Object,
-  entityKey: string,
-  hoverEntityKey: string,
-  onClick: (entityKey: string) => void,
-  onHover: (entityKey: ?string) => void,
+export interface Props {
+  children: string | Object;
+  entityKey: string;
+  hoverEntityKey: string;
+  onClick: (entityKey: string) => void;
+  onHover: (entityKey?: string) => void;
 }
 
 export const AnnotationComponent = (props: Props) => {
@@ -44,8 +42,8 @@ export const AnnotationComponent = (props: Props) => {
 
 const AnnotationWrapper = (
   hoverEntityKey: string,
-  onHover: (entityKey: ?string) => void,
-  onClick: (entityKey: string) => void,
+  onClick: Props["onClick"],
+  onHover: Props["onHover"],
 ) => {
   return (props: Props) => (
     <AnnotationComponent

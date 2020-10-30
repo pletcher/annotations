@@ -9,7 +9,7 @@ import Annotation from '../components/Annotation'
 
 export const findNoteEntities = (
   contentBlock: ContentBlock,
-  callback: Function,
+  callback: (start: number, end: number) => void,
   contentState: ContentState
 ) => {
   contentBlock.findEntityRanges(

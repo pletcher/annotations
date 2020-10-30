@@ -58,7 +58,6 @@ describe('Annotation component', () => {
 
   it('calls `onHover` prop on mouseleave', () => {
     const onHover = jest.fn()
-    const C = Annotation('', onHover, noop)
     const annotation = shallow(
       <Annotation
         entityKey="key"

@@ -1,9 +1,7 @@
 import React from 'react'
 import {
   convertFromRaw,
-  convertToRaw,
   genKey,
-  ContentState,
   Editor,
   EditorState,
   SelectionState,

@@ -1,6 +1,4 @@
-// @flow
-
-import React from 'react'
+import * as React from 'react'
 import type { ContentBlock, ContentState } from 'draft-js'
 
 import { SCANSION_ENTITY_TYPE } from '../constants'
@@ -259,7 +257,7 @@ type Block = {
 type Entity = {
   data: { [key: string]: any },
   mutability: 'IMMUTABLE',
-  type: SCANSION_ENTITY_TYPE,
+  type: string,
 }
 
 export const addScansionToBlocks = (inputBlocks: Array<Block>): {
@@ -294,7 +292,7 @@ export const addScansionToBlocks = (inputBlocks: Array<Block>): {
 
 export const scansionStrategy = (
   contentBlock: ContentBlock,
-  callback: Function,
+  callback: (start: number, end: number) => void,
   contentState: ContentState
 ) => {
   contentBlock.findEntityRanges(
@@ -316,32 +314,31 @@ type Props = {
   entityKey: string
 }
 
-const style = {
-  diacritic: {
-    left: -0.1,
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    position: 'absolute',
-    textAlign: 'center',
-    top: -4,
-    width: '100%',
-  },
-  text: {
-    display: 'inline-block',
-    paddingBottom: 4,
-    paddingTop: 2,
-    position: 'relative',
-  }
-}
+const textStyles = {
+  display: 'inline-block',
+  paddingBottom: 4,
+  paddingTop: 2,
+  position: 'relative',
+} as React.CSSProperties
+
+const diacriticStyles = {
+  left: -0.1,
+  marginLeft: 'auto',
+  marginRight: 'auto',
+  position: 'absolute',
+  textAlign: 'center',
+  top: -4,
+  width: '100%',
+} as React.CSSProperties
 
 const GreekProsody = (props: Props) => {
   const entity = props.contentState.getEntity(props.entityKey)
   const { diacritic } = entity.getData()
 
   return (
-    <div style={style.text}>
+    <div style={textStyles}>
       {props.children}
-      <span style={style.diacritic}>{diacritic}</span>
+      <span style={diacriticStyles}>{diacritic}</span>
     </div>
   )
 }
