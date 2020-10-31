@@ -14,26 +14,25 @@ import {
 } from '../constants'
 
 import type {
+  DraftDecorator,
   RawDraftContentBlock,
   RawDraftEntity
 } from 'draft-js'
 
-import type { SyntheticFocusEvent, SyntheticMouseEvent } from 'react-dom'
+import type { MouseEvent } from 'react'
 
 export type EntityMap = { [key: string]: RawDraftEntity<[key: string]> }
 
-export interface Props {
+export interface AnnotatableProps {
   blocks?: Array<RawDraftContentBlock>;
+  containerStyle?: Object;
   customStyleMap?: Object;
   decorators?: Array<CompositeDecorator>;
   editorState: EditorState;
   entityMap?: EntityMap;
-  onBlur: (event: SyntheticFocusEvent) => void;
+  onBlur: (event: MouseEvent) => void;
   onChange: (editorState: EditorState) => void;
-  onFocus: (event: SyntheticFocusEvent) => void;
-  style?: {
-    container?: { [key: string]: any },
-  };
+  onFocus: (event: MouseEvent) => void;
 }
 
 export type State = {
@@ -42,12 +41,12 @@ export type State = {
 
 export const createEditorState = (
   blocks: Array<RawDraftContentBlock>,
-  entityMap?: EntityMap,
-  decorators?: Array<CompositeDecorator>
+  entityMap: EntityMap = {},
+  decorators: Array<DraftDecorator> = []
 ) => {
   return EditorState.createWithContent(
-    convertFromRaw({ blocks, entityMap: entityMap || {} }),
-    new CompositeDecorator((decorators || []).length ? [].concat(decorators) : [])
+    convertFromRaw({ blocks, entityMap }),
+    new CompositeDecorator(decorators)
   )
 }
 
@@ -57,17 +56,17 @@ export const customStyleMap = {
   }
 }
 
-export default class Annotatable extends React.Component<Props, State> {
+export default class Annotatable extends React.Component<AnnotatableProps, State> {
   static defaultProps = {
+    containerStyle: {},
     decorators: [],
     editorState: EditorState.createEmpty(),
     onBlur: () => {},
     onChange: () => {},
     onFocus: () => {},
-    style: {},
   }
 
-  constructor(props: Props) {
+  constructor(props: AnnotatableProps) {
     super(props)
 
     this.state = {
@@ -75,7 +74,7 @@ export default class Annotatable extends React.Component<Props, State> {
     }
   }
 
-  onBlur = (e: SyntheticFocusEvent) => {
+  onBlur = (e: MouseEvent) => {
     this.props.onBlur(e)
   }
 
@@ -83,17 +82,17 @@ export default class Annotatable extends React.Component<Props, State> {
     this.props.onChange(editorState)
   }
 
-  onFocus = (e: SyntheticFocusEvent) => {
+  onFocus = (e: MouseEvent) => {
     this.props.onFocus(e)
   }
 
   // These mouse event handlers allow selections,
   // but they disallow actually modifying the text.
-  onMouseDown = (e: SyntheticMouseEvent) => {
+  onMouseDown = (e: MouseEvent) => {
     this.setState({ readOnly: false })
   }
 
-  onMouseUp = (e: SyntheticMouseEvent) => {
+  onMouseUp = (e: MouseEvent) => {
     this.setState({ readOnly: true })
   }
 
@@ -102,7 +101,7 @@ export default class Annotatable extends React.Component<Props, State> {
       <div
         onMouseDown={this.onMouseDown}
         onMouseUp={this.onMouseUp}
-        style={this.props.style.container}
+        style={this.props.containerStyle}
       >
         <Editor
           customStyleMap={customStyleMap}

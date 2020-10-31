@@ -5,7 +5,7 @@ import {
   ANNOTATION_HOVER_BLUE
 } from '../constants'
 
-export interface Props {
+export interface AnnotationProps {
   children: string | Object;
   entityKey: string;
   hoverEntityKey: string;
@@ -13,7 +13,7 @@ export interface Props {
   onHover: (entityKey?: string) => void;
 }
 
-export const AnnotationComponent = (props: Props) => {
+export const AnnotationComponent = (props: AnnotationProps) => {
   const hoverEntityKey = props.hoverEntityKey || ''
 
   const style = {
@@ -42,10 +42,10 @@ export const AnnotationComponent = (props: Props) => {
 
 const AnnotationWrapper = (
   hoverEntityKey: string,
-  onClick: Props["onClick"],
-  onHover: Props["onHover"],
+  onClick: AnnotationProps["onClick"],
+  onHover: AnnotationProps["onHover"],
 ) => {
-  return (props: Props) => (
+  return (props: AnnotationProps) => (
     <AnnotationComponent
       {...props}
       hoverEntityKey={hoverEntityKey}

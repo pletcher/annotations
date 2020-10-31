@@ -9,18 +9,18 @@ import {
   convertToRaw,
 } from 'draft-js'
 
-import type { SyntheticMouseEvent } from 'react-dom'
+import type { MouseEvent } from 'react'
 
 import {
   ANNOTATION_ENTITY_TYPE,
   PENDING_ANNOTATION_STYLE,
 } from '../constants'
 
-export interface Props {
+export interface AnnotationEditorProps {
   editorState: EditorState;
   onCancel?: (e: Event) => void;
   onChange: (editorState: EditorState) => void;
-  onFocus?: (event: SyntheticMouseEvent) => void;
+  onFocus: (event: MouseEvent) => void;
   onSave?: (e: Event, editorState: EditorState) => void;
   readOnly?: boolean;
   reset?: () => void;
@@ -57,10 +57,8 @@ export const addNoteEntityToAnnotatable = (
   )
 }
 
-export default class AnnotationEditor extends React.Component<Props> {
-  editor: Editor
-  focus: Function
-  handleChange: Function
+export default class AnnotationEditor extends React.Component<AnnotationEditorProps> {
+  editorRef: React.RefObject<Editor>
 
   static defaultProps = {
     editorState: EditorState.createEmpty(),
@@ -77,17 +75,24 @@ export default class AnnotationEditor extends React.Component<Props> {
     }
   }
 
+  constructor(props: AnnotationEditorProps | Readonly<AnnotationEditorProps>) {
+    super(props)
+
+    this.editorRef = React.createRef()
+  }
+
   onChange = (editorState: EditorState) => {
     this.props.onChange(editorState)
   }
 
-  onDivClick = (e: SyntheticMouseEvent) => {
+  onDivClick = (e: MouseEvent) => {
     e.preventDefault()
 
-    this.editor && this.editor.focus()
+    // @ts-ignore -- not sure why it isn't picking up on Editor.focus()
+    this.editorRef && this.editorRef.focus()
   }
 
-  onFocus = (e: SyntheticMouseEvent) => {
+  onFocus = (e: MouseEvent) => {
     this.props.onFocus(e)
   }
 
@@ -103,7 +108,7 @@ export default class AnnotationEditor extends React.Component<Props> {
           onChange={this.onChange}
           onFocus={this.onFocus}
           readOnly={this.props.readOnly}
-          ref={c => { this.editor = c }}
+          ref={this.editorRef}
           spellCheck
         />
       </div>
